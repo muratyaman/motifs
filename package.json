@@ -1,0 +1,56 @@
+{
+  "name": "motifs",
+  "version": "1.0.0",
+  "description": "Library for implementation of certain patterns like Repository ",
+  "main": "lib/index.js",
+  "scripts": {
+    "clean": "rimraf lib",
+    "build:ts": "tsc -p ./tsconfig.json",
+    "build": "npm run clean && npm run build:ts",
+    "lint": "eslint . --ext .ts",
+    "test": "mocha ./src/__tests__/**/*.test.ts",
+    "test:coverage": "nyc npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/muratyaman/motifs.git"
+  },
+  "keywords": [
+    "pattern",
+    "patterns",
+    "repository",
+    "dto"
+  ],
+  "author": "Haci Murat Yaman",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/muratyaman/motifs/issues"
+  },
+  "homepage": "https://github.com/muratyaman/motifs#readme",
+  "engines": {
+    "node": ">=16"
+  },
+  "files": [
+    "lib"
+  ],
+  "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.2",
+    "@types/chai": "^4.3.1",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.30.3",
+    "@typescript-eslint/parser": "^5.30.3",
+    "chai": "^4.3.6",
+    "eslint": "^8.19.0",
+    "mocha": "^10.0.0",
+    "nyc": "^15.1.0",
+    "rimraf": "^3.0.2",
+    "ts-node": "^10.8.2",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "emittery": "^0.11.0",
+    "node-cache": "^5.1.2",
+    "redis": "^4.1.1"
+  }
+}
