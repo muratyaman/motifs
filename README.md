@@ -63,7 +63,7 @@ Sample usage for cacher, repo and listener/observer:
 
 ```ts
 import express from 'express';
-import { IBaseDto, makeCacher, makeRepo, MotifsErrorNotFound } from 'motifs';
+import { IBaseDto, makeCacher, makeListener, makeRepo, MotifsErrorNotFound } from 'motifs';
 
 main();
 
