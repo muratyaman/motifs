@@ -56,3 +56,66 @@ export interface IRepo<T extends IBaseDto = IBaseDto> {
   delete_  (id: string)                 : Promise<boolean>;
 }
 ```
+
+## Examples
+
+Sample usage for cacher and repo:
+
+```ts
+import express from 'express';
+import { IBaseDto, makeCacher, makeRepo, MotifsErrorNotFound } from 'motifs';
+
+main();
+
+async function main() {
+  const app = express();
+
+  app.use(express.json());
+
+  const cacheExpiry10Mins = 10 * 60 * 1000;
+
+  const contactCacher = await makeCacher({ kind: 'memory' });
+  const contactRepo   = await makeRepo<IContact>({ kind: 'memory', name: 'contacts' });
+
+  contactRepo.em.on('contacts.create.after', async ({ dto }) => {
+    console.log('contact created', dto);
+  });
+
+  app.post('/contacts', (req, res) => {
+    const contact: IContact = req.body as IContact; // TODO: avoid pretending, validate
+    const data = await contactRepo.create(contact);
+    res.json({ data });
+  });
+
+  app.get('/contacts/:id', (req, res) => {
+    const { id } = req.params;
+    const key = `contacts/${id}`;
+    try {
+      const cached = await contactCacher.getItem<IContact>(key);
+      return res.json({ data: cached });
+    } catch (err) {
+      // cache miss?
+      try {
+        const contact = await contactRepo.retrieve(id);
+        return res.json({ data: contact });
+      } catch (err) {
+        if (err instanceof MotifsErrorNotFound) {
+          res.status(404),json({ error: 'not found' });
+        } else {
+          console.error(err);
+          res.status(500).json({ error: 'server error' });
+        }
+        return;
+      }
+      await contactCacher.setItem(key, contact, cacheExpiry10Mins); // cache aside
+    }
+  });
+
+  app.listen(8080);
+}
+interface IContact extends IBaseDto {
+  firstName: string;
+  lastName:  string;
+  dob:       string;
+}
+```
