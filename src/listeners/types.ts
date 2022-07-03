@@ -5,12 +5,20 @@ export interface IListener<T = unknown> {
 }
 
 export interface IListenerConfig {
-  kind     : 'kafka' | 'rabbitmq' | 'redis';
+  kind     : 'kafka' | 'pg' | 'rabbitmq' | 'redis';
   channelId: 'string';
-  redis?: {
-    url: string; // e.g. 'redis://localhost:6379'
+  kafka?: {
+    url      : string;  // e.g. 'localhost:9092'
+    clientId?: string;
+    groupId? : string;
+  };
+  pg?: {
+    url: string; // e.g. 'postgresql://user:password@server:5432/db-name'
   };
   rabbitmq?: {
     url: string; // e.g. 'amqp://localhost'
+  };
+  redis?: {
+    url: string; // e.g. 'redis://localhost:6379'
   };
 }
