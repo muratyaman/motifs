@@ -1,5 +1,5 @@
 import Emittery from 'emittery';
-import { IListener } from './types';
+import { IListener, IListenerErrorHandler, IListenerMessageHandler } from './types';
 
 export abstract class BaseListener<T = unknown> implements IListener<T> {
 
@@ -13,11 +13,19 @@ export abstract class BaseListener<T = unknown> implements IListener<T> {
   abstract listen(): Promise<void>;
   //abstract stop(): Promise<void>;
 
-  async onMessage(msgObj: T) {
+  onMessage(handler: IListenerMessageHandler<T>): void {
+    this.em.on('message', handler);
+  }
+
+  onError(handler: IListenerErrorHandler): void {
+    this.em.on('error', handler);
+  }
+
+  protected async _onMessage(msgObj: T) {
     await this.em.emit('message', msgObj);
   }
 
-  async onError(err: unknown) {
+  protected async _onError(err: unknown) {
     await this.em.emit('error', err);
   }
 }

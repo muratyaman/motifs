@@ -1,7 +1,21 @@
+import Emittery from 'emittery';
+
 export interface IListener<T = unknown> {
-  listen(channelId: string): Promise<void>;
-  onMessage(msgObj: T): Promise<void>;
+  channelId: string;
+  em       : Emittery; // internal event manager
+
+  listen(): Promise<void>;
+  onMessage(handler: IListenerMessageHandler<T>): void;
+  onError(handler: IListenerErrorHandler): void;
   //stop(): Promise<void>;
+}
+
+export interface IListenerMessageHandler<T = unknown> {
+  (msgObj: T): Promise<void>;
+}
+
+export interface IListenerErrorHandler {
+  (err: unknown): Promise<void>;
 }
 
 export interface IListenerConfig {

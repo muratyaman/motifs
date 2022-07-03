@@ -59,7 +59,7 @@ export interface IRepo<T extends IBaseDto = IBaseDto> {
 
 ## Examples
 
-Sample usage for cacher and repo:
+Sample usage for cacher, repo and listener/observer:
 
 ```ts
 import express from 'express';
@@ -75,11 +75,19 @@ async function main() {
   const cacheExpiry10Mins = 10 * 60 * 1000;
 
   const contactCacher = await makeCacher({ kind: 'memory' });
-  const contactRepo   = await makeRepo<IContact>({ kind: 'memory', name: 'contacts' });
+
+  const contactRepo = await makeRepo<IContact>({ kind: 'memory', name: 'contacts' });
 
   contactRepo.em.on('contacts.create.after', async ({ dto }) => {
-    console.log('contact created', dto);
+    console.info('contact created', dto);
   });
+
+  const contractListener = await makeListener<IAlienContactCreated>({ channelId: 'mars', kind: 'kafka', kafka: { url: 'localhost:9092' } });
+
+  contractListener.onMessage(async (msg: IAlienContactCreated) => {
+    console.info('new contact', msg);
+  });
+  contractListener.listen();
 
   app.post('/contacts', (req, res) => {
     const contact: IContact = req.body as IContact; // TODO: avoid pretending, validate
@@ -111,9 +119,15 @@ async function main() {
 
   app.listen(8080);
 }
+
 interface IContact extends IBaseDto {
   firstName: string;
   lastName:  string;
   dob:       string;
+}
+
+interface IAlienContactCreated {
+  id?    : string;
+  planet?: string;
 }
 ```

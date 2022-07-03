@@ -29,16 +29,16 @@ export class KafkaListener<T = unknown> extends BaseListener<T> implements IList
         try {
           const msgStr = msg?.message?.value?.toString('utf-8') ?? '{}';
           const msgObj = JSON.parse(msgStr) as T; // pretend
-          await this.onMessage(msgObj).then(noOp).catch(noOp);
+          await this._onMessage(msgObj).then(noOp).catch(noOp);
         } catch (err) {
-          return this.onError(err).then(noOp).catch(noOp);
+          return this._onError(err).then(noOp).catch(noOp);
         }
       }
 
       await this.k.run({ eachMessage: handleMsg });
 
     } catch (err) {
-      return this.onError(err).then(noOp).catch(noOp);
+      return this._onError(err).then(noOp).catch(noOp);
     }
   }
 }

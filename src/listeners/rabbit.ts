@@ -41,9 +41,9 @@ export class RabbitListener<T = unknown> extends BaseListener<T> implements ILis
             }
           }
 
-          return this.onMessage(msgObj).then(afterMsg).catch(noOp);
+          return this._onMessage(msgObj).then(afterMsg).catch(noOp);
         } catch (err) {
-          return this.onError(err).then(noOp).catch(noOp);
+          return this._onError(err).then(noOp).catch(noOp);
         }
       }
 
@@ -51,7 +51,7 @@ export class RabbitListener<T = unknown> extends BaseListener<T> implements ILis
       const consumeResult = await ch.consume(this.channelId, handleMsg, consumeOptions);
       console.debug({ consumeResult });
     } catch (err) {
-      return this.onError(err).then(noOp).catch(noOp);
+      return this._onError(err).then(noOp).catch(noOp);
     }
   }
 }
