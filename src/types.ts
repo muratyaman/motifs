@@ -1,4 +1,5 @@
-import { createClient } from "redis";
+import { Connection } from 'amqplib';
+import { createClient } from 'redis';
 
 export type IObject     = Record<string, unknown>;
 export type IFlatObject = Record<string, string | number | boolean | null>;
@@ -19,3 +20,5 @@ export type IJsonObject = Record<string, IJsonScalar>;
 export type IJson       = IJsonScalar | IJsonList | IJsonObject;
 
 export type RedisClient = ReturnType<typeof createClient>;
+
+export type RabitClient = Connection;

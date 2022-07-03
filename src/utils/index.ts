@@ -21,3 +21,11 @@ export const makeKeyMaker = (name: string) => {
 }
 
 export const makeId = (key: string) => key.split(SEP)[1];
+
+export function noOp() {
+  // do nothing
+}
+
+export async function sleepMs(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
