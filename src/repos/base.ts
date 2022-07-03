@@ -28,7 +28,6 @@ export abstract class BaseRepo<T extends IBaseDto = IBaseDto> implements IRepo<T
 
   async findMany(conditions: IFlatObject): Promise<T[]> {
     const keys = await this._keys();
-    console.log({ keys });
     const rows: T[] = [];
     for (const key of keys) {
       const row = await this._get(key);
@@ -56,7 +55,6 @@ export abstract class BaseRepo<T extends IBaseDto = IBaseDto> implements IRepo<T
   }
 
   async retrieve(id: string): Promise<T> {
-    console.log('retrieve', id);
     const key = this._key(id);
     const dto = await this._get(key);
     if (!dto) throw new MotifsErrorNotFound();

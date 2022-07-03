@@ -1,3 +1,5 @@
+import { createClient } from "redis";
+
 export type IObject     = Record<string, unknown>;
 export type IFlatObject = Record<string, string | number | boolean | null>;
 
@@ -15,3 +17,5 @@ export type IJsonScalar = string | number | boolean | null;
 export type IJsonList   = Array<IJsonScalar>;
 export type IJsonObject = Record<string, IJsonScalar>;
 export type IJson       = IJsonScalar | IJsonList | IJsonObject;
+
+export type RedisClient = ReturnType<typeof createClient>;

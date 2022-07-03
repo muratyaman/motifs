@@ -1,5 +1,4 @@
 import Emittery from 'emittery';
-import { createClient } from 'redis';
 import { IBaseDto, IFlatObject } from '../types';
 
 export interface IRepo<T extends IBaseDto = IBaseDto> {
@@ -12,8 +11,6 @@ export interface IRepo<T extends IBaseDto = IBaseDto> {
   update   (id: string, dto: Partial<T>): Promise<T>;
   delete_  (id: string)                 : Promise<boolean>;
 }
-
-export type RedisClient = ReturnType<typeof createClient>;
 
 export interface IRepoConfig {
   kind: 'memory' | 'redis';
