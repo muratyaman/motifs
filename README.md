@@ -93,11 +93,11 @@ async function main() {
     try {
       const cached = await contactCacher.getItem<IContact>(key);
       return res.json({ data: cached });
-    } catch (err) {
-      // cache miss?
+    } catch (err) { // cache miss?
       try {
         const contact = await contactRepo.retrieve(id);
-        return res.json({ data: contact });
+        await contactCacher.setItem(key, contact, cacheExpiry10Mins); // cache aside
+        res.json({ data: contact });
       } catch (err) {
         if (err instanceof MotifsErrorNotFound) {
           res.status(404),json({ error: 'not found' });
@@ -105,9 +105,7 @@ async function main() {
           console.error(err);
           res.status(500).json({ error: 'server error' });
         }
-        return;
       }
-      await contactCacher.setItem(key, contact, cacheExpiry10Mins); // cache aside
     }
   });
 
