@@ -1,6 +1,6 @@
 {
   "name": "motifs",
-  "version": "1.3.5",
+  "version": "1.3.6",
   "description": "Library for implementation of certain patterns like Repository ",
   "main": "lib/index.js",
   "scripts": {

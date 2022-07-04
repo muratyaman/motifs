@@ -30,8 +30,18 @@ We are expecting to listen to a channel and messages will be sent in a particula
 
 ```ts
 export interface IListener<T = unknown> {
-  listen(channelId: string): Promise<void>;
-  onMessage(msgObj: T): Promise<void>;
+  channelId: string;
+  em       : Emittery; // internal event manager
+
+  listen(): Promise<void>;
+  onMessage(handler: IListenerMessageHandler<T>): void;
+  onError(handler: IListenerErrorHandler): void;
+}
+export interface IListenerMessageHandler<T = unknown> {
+  (msgObj: T): Promise<void>;
+}
+export interface IListenerErrorHandler {
+  (err: unknown): Promise<void>;
 }
 ```
 
