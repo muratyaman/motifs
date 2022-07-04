@@ -22,9 +22,9 @@ export class PgListener<T = unknown> extends BaseListener<T> implements IListene
         console.debug('pg listener consuming message...');
         try {
           const msgObj = JSON.parse(msg.payload ?? '{}') as T; // pretend
-          await this._onMessage(msgObj).then(noOp).catch(noOp);
+          await this._onMessage(msgObj);
         } catch (err) {
-          return this._onError(err).then(noOp).catch(noOp);
+          await this._onError(err);
         }
       }
 
