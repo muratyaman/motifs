@@ -1,6 +1,5 @@
-import Emittery from 'emittery';
 import { MotifsErrorDuplicate, MotifsErrorNotFound } from '../errors';
-import { IBaseDto, IFlatObject } from '../types';
+import { EventManager, IBaseDto, IFlatObject } from '../types';
 import { makeKeyMaker, ts, uuid } from '../utils';
 import { IRepo } from './types';
 
@@ -12,7 +11,7 @@ export abstract class BaseRepo<T extends IBaseDto = IBaseDto> implements IRepo<T
   protected abstract _get(key: string): Promise<T>;
   protected abstract _del(key: string): Promise<boolean>;
 
-  constructor(public name: string, public em: Emittery) {
+  constructor(public name: string, public em: EventManager) {
     this._key = makeKeyMaker(name);
   }
 

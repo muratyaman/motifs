@@ -1,13 +1,12 @@
 import NodeCache from 'node-cache';
-import Emittery from 'emittery';
 import { MotifsErrorNotFound } from '../errors';
-import { IBaseDto } from '../types';
+import { EventManager, IBaseDto } from '../types';
 import { BaseRepo } from './base';
 import { IRepo } from './types';
 
 export class RepoWithMemory<T extends IBaseDto = IBaseDto> extends BaseRepo<T> implements IRepo<T> {
 
-  constructor(public name: string, public em: Emittery, protected r: NodeCache) {
+  constructor(public name: string, public em: EventManager, protected r: NodeCache) {
     super(name, em);
   }
 

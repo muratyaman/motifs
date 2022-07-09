@@ -1,7 +1,6 @@
 
-import Emittery from 'emittery';
 import { MotifsErrorNotFound } from '../errors';
-import { IBaseDto, RedisClient } from '../types';
+import { EventManager, IBaseDto, RedisClient } from '../types';
 import { BaseRepo } from './base';
 import { IRepo } from './types';
 
@@ -9,7 +8,7 @@ export class RepoWithRedis<T extends IBaseDto = IBaseDto> extends BaseRepo<T> im
 
   constructor(
     public name: string,
-    public em: Emittery, // internal event manager
+    public em: EventManager,
     protected r: RedisClient,
   ) {
     super(name, em);

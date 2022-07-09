@@ -1,7 +1,7 @@
-import Emittery from 'emittery';
 import amqplib from 'amqplib';
 import { Pool } from 'pg';
 import { createClient } from 'redis';
+import { EventManager } from '../types';
 import { RedisListener } from './redis';
 import { IListener, IListenerConfig } from './types';
 import { RabbitListener } from './rabbit';
@@ -11,7 +11,7 @@ import { KafkaListener } from './kafka';
 
 export async function makeListener(conf: IListenerConfig): Promise<IListener> {
 
-  const em = new Emittery();
+  const em = new EventManager();
 
   if (conf.kind === 'kafka' && conf.kafka) {
     const k = new Kafka({ clientId: conf.kafka.clientId ?? 'motifs', brokers: [ conf.kafka.url ] });

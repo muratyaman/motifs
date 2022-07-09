@@ -1,5 +1,4 @@
-import Emittery from 'emittery';
-import { RedisClient } from '../types';
+import { EventManager, RedisClient } from '../types';
 import { noOp } from '../utils';
 import { BaseListener } from './base';
 import { IListener } from './types';
@@ -7,7 +6,7 @@ import { IListener } from './types';
 export class RedisListener<T = unknown> extends BaseListener<T> implements IListener {
   constructor(
     public channelId: string,
-    public readonly em: Emittery,
+    public readonly em: EventManager,
     public readonly r: RedisClient,
   ) {
     super(channelId, em);

@@ -1,6 +1,5 @@
 import { ConsumeMessage } from 'amqplib';
-import Emittery from 'emittery';
-import { RabitClient } from '../types';
+import { EventManager, RabitClient } from '../types';
 import { noOp } from '../utils';
 import { BaseListener } from './base';
 import { IListener } from './types';
@@ -9,7 +8,7 @@ export class RabbitListener<T = unknown> extends BaseListener<T> implements ILis
 
   constructor(
     public channelId: string,
-    public readonly em: Emittery,
+    public readonly em: EventManager,
     public readonly r: RabitClient,
   ) {
     super(channelId, em);
@@ -24,7 +23,7 @@ export class RabbitListener<T = unknown> extends BaseListener<T> implements ILis
       console.debug({ assertResult });
 
       const handleMsg = (msg: ConsumeMessage | null) => {
-        console.debug('rabbitmq listener consuming message...');
+        console.debug('RabbitListener consuming message...');
         try {
           if (!msg) {
             console.debug('Consumer cancelled by server');

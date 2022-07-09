@@ -1,11 +1,11 @@
-import Emittery from 'emittery';
+import { EventManager } from '../types';
 import { IListener, IListenerErrorHandler, IListenerMessageHandler } from './types';
 
 export abstract class BaseListener<T = unknown> implements IListener<T> {
 
   constructor(
     public readonly channelId: string,
-    public readonly em: Emittery,
+    public readonly em: EventManager,
   ) {
     // do nothing
   }

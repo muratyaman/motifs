@@ -1,8 +1,7 @@
 import { expect } from 'chai';
-import Emittery from 'emittery';
 import { MotifsErrorDuplicate, MotifsErrorNotFound } from '../../../errors';
 import { makeRepo, RepoWithMemory } from '../../../repos';
-import { IBaseDto } from '../../../types';
+import { EventManager, IBaseDto } from '../../../types';
 
 describe('Repositories', async () => {
 
@@ -11,7 +10,7 @@ describe('Repositories', async () => {
     role    : number;
   }
 
-  const em = new Emittery();
+  const em = new EventManager();
   const repo = await makeRepo<IUser>({ kind: 'memory', name: 'users' }, em);
 
   const user1: Partial<IUser> = {

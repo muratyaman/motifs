@@ -1,8 +1,8 @@
-import Emittery from 'emittery';
+import { EventManager } from '../types';
 
 export interface IListener<T = unknown> {
   channelId: string;
-  em       : Emittery; // internal event manager
+  em       : EventManager; // internal event manager
 
   listen(): Promise<void>;
   onMessage(handler: IListenerMessageHandler<T>): void;

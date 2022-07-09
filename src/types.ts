@@ -1,4 +1,5 @@
 import { Connection } from 'amqplib';
+import Emittery from 'emittery';
 import { createClient } from 'redis';
 
 export type IObject     = Record<string, unknown>;
@@ -19,3 +20,7 @@ export type IJson = string | number | boolean | null | IJson[] | {[key: string]:
 export type RedisClient = ReturnType<typeof createClient>;
 
 export type RabitClient = Connection;
+
+export type ILogger = typeof console;
+
+export class EventManager extends Emittery {}

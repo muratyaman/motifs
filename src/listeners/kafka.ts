@@ -1,5 +1,5 @@
 import { Consumer, ConsumerSubscribeTopics, EachMessagePayload } from 'kafkajs';
-import Emittery from 'emittery';
+import { EventManager } from '../types';
 import { noOp } from '../utils';
 import { BaseListener } from './base';
 import { IListener } from './types';
@@ -8,7 +8,7 @@ export class KafkaListener<T = unknown> extends BaseListener<T> implements IList
 
   constructor(
     public channelId: string,
-    public readonly em: Emittery,
+    public readonly em: EventManager,
     public readonly k: Consumer,
   ) {
     super(channelId, em);
@@ -25,7 +25,7 @@ export class KafkaListener<T = unknown> extends BaseListener<T> implements IList
       await this.k.subscribe(subscribeOptions);
 
       const handleMsg = async (msg: EachMessagePayload) => {
-        console.debug('kafka listener consuming message...');
+        console.debug('KafkaListener consuming message...');
         try {
           const msgStr = msg?.message?.value?.toString('utf-8') ?? '{}';
           const msgObj = JSON.parse(msgStr) as T; // pretend

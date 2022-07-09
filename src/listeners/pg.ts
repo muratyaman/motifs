@@ -1,14 +1,16 @@
 import { Pool } from 'pg';
-import Emittery from 'emittery';
-import { noOp } from '../utils';
+import { EventManager } from '../types';
+import { noOp, pgDecodeReceived } from '../utils';
 import { BaseListener } from './base';
 import { IListener } from './types';
+
+// @see https://www.postgresql.org/docs/current/sql-listen.html
 
 export class PgListener<T = unknown> extends BaseListener<T> implements IListener {
 
   constructor(
     public channelId: string,
-    public readonly em: Emittery,
+    public readonly em: EventManager,
     public readonly p: Pool,
   ) {
     super(channelId, em);
@@ -19,16 +21,18 @@ export class PgListener<T = unknown> extends BaseListener<T> implements IListene
       const client = await this.p.connect();
 
       const handleMsg = async (msg: Notification) => {
-        console.debug('pg listener consuming message...');
+        console.debug('PgListener consuming message...');
         try {
-          const msgObj = JSON.parse(msg.payload ?? '{}') as T; // pretend
+          const msgObj = pgDecodeReceived<T>(msg.payload ?? ''); // pretend
           await this._onMessage(msgObj);
         } catch (err) {
           await this._onError(err);
         }
       }
 
-      client.query('LISTEN ' + this.channelId);
+      const query = `LISTEN "${this.channelId}"`;
+      const res   = await client.query(query);
+      console.debug('PgListener', res);
       client.on('notification', handleMsg);
 
     } catch (err) {

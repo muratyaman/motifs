@@ -1,9 +1,8 @@
-import Emittery from 'emittery';
-import { IBaseDto, IFlatObject } from '../types';
+import { EventManager, IBaseDto, IFlatObject } from '../types';
 
 export interface IRepo<T extends IBaseDto = IBaseDto> {
   name: string;
-  em  : Emittery; // internal event manager
+  em  : EventManager;
 
   findMany (conditions: IFlatObject)    : Promise<T[]>;
   create   (dto: Partial<T>)            : Promise<T>;
